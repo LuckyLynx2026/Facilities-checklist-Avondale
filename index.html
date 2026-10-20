@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Facilities Daily &amp; Weekly Duties Checklist</title>
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --bg: #f4f5f6;
+    --surface: #ffffff;
+    --ink: #161a1d;
+    --muted: #5b646b;
+    --line: #d6dadd;
+    --accent: #0d6b62;
+    --accent-soft: #e2f1ee;
+    --accent-ink: #ffffff;
+    --track: #dfe3e5;
+    --focus: #1b5fd1;
+    --font: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111416;
+      --surface: #1b2024;
+      --ink: #eceff1;
+      --muted: #9aa4ab;
+      --line: #2e353a;
+      --accent: #46b8aa;
+      --accent-soft: #17302d;
+      --accent-ink: #08201d;
+      --track: #2b3237;
+      --focus: #7fb0ff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111416;
+    --surface: #1b2024;
+    --ink: #eceff1;
+    --muted: #9aa4ab;
+    --line: #2e353a;
+    --accent: #46b8aa;
+    --accent-soft: #17302d;
+    --accent-ink: #08201d;
+    --track: #2b3237;
+    --focus: #7fb0ff;
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 20px 16px 64px; }
+
+  header { padding: 8px 2px 18px; }
+  .brand { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: var(--muted); margin: 0 0 6px; text-transform: none; }
+  h1 { font-size: 26px; line-height: 1.15; margin: 0 0 12px; font-weight: 800; letter-spacing: -.01em; }
+  .standard {
+    margin: 0; padding: 12px 14px;
+    background: var(--accent-soft);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    font-size: 15px;
+  }
+  .standard strong { font-weight: 700; }
+
+  .meta {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px; margin-bottom: 22px;
+  }
+  .meta .field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .meta .full { grid-column: 1 / -1; }
+  .meta label, .meta .label { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .meta input[type="text"] {
+    font: inherit; font-size: 17px; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 12px; width: 100%;
+  }
+  .meta .value { font-size: 17px; font-weight: 600; padding: 2px 0; }
+  .meta select {
+    font: inherit; font-size: 17px; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 12px; width: 100%; min-height: 46px;
+  }
+  .meta select:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  section { margin-bottom: 28px; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+  h2 { font-size: 20px; margin: 0; font-weight: 800; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0 0 10px; }
+  .sub strong { color: var(--ink); font-weight: 600; }
+
+  .progress { display: flex; align-items: center; gap: 12px; margin: 8px 0 12px; }
+  .bar { flex: 1; height: 8px; background: var(--track); border-radius: 99px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 99px; transition: width .25s ease; }
+  .count { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  ul.list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  ul.list li + li { border-top: 1px solid var(--line); }
+  .item { display: flex; gap: 14px; align-items: flex-start; padding: 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .item input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .box {
+    flex: none; width: 26px; height: 26px; margin-top: 1px;
+    border: 2px solid var(--muted); border-radius: 7px; background: var(--surface);
+    display: grid; place-items: center; transition: background .15s, border-color .15s;
+  }
+  .box svg { width: 16px; height: 16px; stroke: var(--accent-ink); stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+  .text { font-size: 16px; }
+  .item input:checked + .box { background: var(--accent); border-color: var(--accent); }
+  .item input:checked + .box svg { opacity: 1; }
+  .item input:checked ~ .text { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--muted); }
+  .item input:focus-visible + .box { outline: 3px solid var(--focus); outline-offset: 2px; }
+  @media (hover: hover) { .item:hover { background: var(--accent-soft); } }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  button {
+    font: inherit; font-size: 15px; font-weight: 600; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 14px; cursor: pointer; min-height: 44px;
+  }
+  button:focus-visible, textarea:focus-visible, input[type="text"]:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  textarea {
+    width: 100%; min-height: 140px; resize: vertical;
+    font: inherit; font-size: 16px; color: var(--ink);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px;
+  }
+  .hint { color: var(--muted); font-size: 13px; margin: 8px 2px 0; }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 22px; }
+    .meta { grid-template-columns: 1fr; }
+  }
+  @media print {
+    :root { --bg: #fff; --surface: #fff; --ink: #000; --muted: #333; --line: #888; }
+    body { background: #fff; }
+    .actions, .hint { display: none; }
+    .wrap { padding: 0; max-width: none; }
+    textarea { min-height: 120px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="brand">Avondale Dealerships</p>
+    <h1>Facilities Team Member: Daily &amp; Weekly Duties Checklist</h1>
+    <p class="standard"><strong>Operating standard:</strong> If you see it, take ownership of it. Correct it, clean it, or report it please.</p>
+  </header>
+
+  <div class="meta">
+    <div class="field full">
+      <label for="name">Your name</label>
+      <input type="text" id="name" placeholder="Type your name" autocomplete="name" autocapitalize="words">
+    </div>
+    <div class="field">
+      <label for="location">Location</label>
+      <select id="location">
+        <option value="">Select location</option>
+        <option value="Mercedes-Benz Grapevine">Mercedes-Benz Grapevine</option>
+        <option value="Premier Dallas">Premier Dallas</option>
+        <option value="Porsche Grapevine">Porsche Grapevine</option>
+      </select>
+    </div>
+    <div class="field">
+      <span class="label">Period</span>
+      <span class="value">September 2026 &amp; beyond</span>
+    </div>
+  </div>
+
+  <section aria-labelledby="daily-h">
+    <div class="section-head">
+      <h2 id="daily-h">Daily duties</h2>
+    </div>
+    <p class="sub">Complete every shift. <strong id="today"></strong> Resets automatically each day.</p>
+    <div class="progress">
+      <div class="bar" aria-hidden="true"><span id="daily-bar"></span></div>
+      <span class="count" id="daily-count" aria-live="polite">0 of 0</span>
+    </div>
+    <ul class="list" id="daily-list"></ul>
+    <div class="actions"><button type="button" data-clear="daily">Clear today’s checks</button></div>
+  </section>
+
+  <section aria-labelledby="weekly-h">
+    <div class="section-head">
+      <h2 id="weekly-h">Weekly duties</h2>
+    </div>
+    <p class="sub">Complete at least once each week. <strong id="week"></strong> Resets every Monday.</p>
+    <div class="progress">
+      <div class="bar" aria-hidden="true"><span id="weekly-bar"></span></div>
+      <span class="count" id="weekly-count" aria-live="polite">0 of 0</span>
+    </div>
+    <ul class="list" id="weekly-list"></ul>
+    <div class="actions"><button type="button" data-clear="weekly">Clear this week’s checks</button></div>
+  </section>
+
+  <section aria-labelledby="notes-h">
+    <div class="section-head"><h2 id="notes-h">Notes and items requiring follow-up</h2></div>
+    <textarea id="notes" placeholder="Write down anything that needs follow-up"></textarea>
+    <p class="hint">Your name, location, checks, and notes are saved on this device only. Nobody else can see them. If the PDF does not download, a print screen opens: choose “Save as PDF” there.</p>
+    <div class="actions"><button type="button" id="print">Save as PDF</button></div>
+  </section>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function () {
+  var DAILY = [
+    "Walk the exterior of the facility each morning; identify anything dirty, damaged, unsafe, or not functioning properly. Handle or report it as needed.",
+    "Inspect showroom floors, glass, fixtures, marble, wood trim, metal surfaces, and furniture; clean or polish as needed.",
+    "Inspect reception areas, customer lounges, offices, and conference rooms for cleanliness and presentation.",
+    "Check client restrooms 3 times per day; clean and replenish supplies throughout the day.",
+    "Check coffee stations, water service, and refreshment areas; clean and restock as necessary.",
+    "Confirm all guest amenities are clean, stocked, organized, and operational.",
+    "Walk sidewalks, entrances, outdoor client areas, and vehicle-charging areas; remove litter and address hazards.",
+    "Empty and maintain waste receptacles as needed.",
+    "Check facilities teammate and ask if support is needed.",
+    "Visually check lighting, HVAC comfort, automatic doors, elevators, and other basic building systems.",
+    "Replace accessible light bulbs and complete minor maintenance tasks as assigned.",
+    "Immediately report broken equipment, property damage, safety hazards, or building-system problems.",
+    "Respond promptly to facility requests from the Facilities & Construction Director, General Manager, and department leaders.",
+    "Support room, furniture, equipment, training, or event setup requests.",
+    "Complete an afternoon/end-of-day facility walk so client-facing areas are left at Avondale standards.",
+    "Report unresolved facility issues and completed maintenance activities to the Facilities & Construction Director."
+  ];
+  var WEEKLY = [
+    "Conduct a detailed facility inspection beyond normal daily walkthroughs.",
+    "Deep clean premium surfaces, fixtures, trim, furniture, and less-accessible areas.",
+    "Inspect exterior furniture, landscaped areas, sidewalks, entrances, and vehicle-charging areas.",
+    "Inspect waste-management areas for cleanliness and proper condition.",
+    "Inspect janitorial/maintenance storage areas and confirm chemicals are properly stored.",
+    "Inventory cleaning, restroom, janitorial, and maintenance supplies; identify items requiring reorder.",
+    "Review frequently used light fixtures and replace failed bulbs.",
+    "Inspect cleaning equipment and confirm it is clean, operational, and properly stored.",
+    "Review outstanding maintenance items and follow up on anything that remains unresolved.",
+    "Review upcoming events/training needs and prepare for room setups, vehicle unveilings, or special facility needs.",
+    "Provide a brief weekly update: Completed / Outstanding / Supplies Needed to Michal Solecki"
+  ];
+
+  /* Storage that never breaks the page */
+  var mem = {};
+  function read(key) {
+    try { var v = window.localStorage.getItem(key); return v === null ? (mem[key] || null) : v; }
+    catch (e) { return mem[key] || null; }
+  }
+  function write(key, val) {
+    mem[key] = val;
+    try { window.localStorage.setItem(key, val); } catch (e) {}
+  }
+
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+  var now = new Date();
+  var dayKey = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+  var monday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+  var weekKey = monday.getFullYear() + "-" + pad(monday.getMonth() + 1) + "-" + pad(monday.getDate());
+
+  var fmtDay = { weekday: "long", month: "long", day: "numeric" };
+  var fmtShort = { month: "short", day: "numeric" };
+  var sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+  document.getElementById("today").textContent = now.toLocaleDateString(undefined, fmtDay) + ".";
+  document.getElementById("week").textContent = "Week of " + monday.toLocaleDateString(undefined, fmtShort) + " to " + sunday.toLocaleDateString(undefined, fmtShort) + ".";
+
+  function loadSet(key) {
+    try { var s = JSON.parse(read(key) || "[]"); return Array.isArray(s) ? s : []; }
+    catch (e) { return []; }
+  }
+
+  var CHECK_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="5 12.5 10 17.5 19 7"></polyline></svg>';
+
+  function build(kind, items, key) {
+    var list = document.getElementById(kind + "-list");
+    var bar = document.getElementById(kind + "-bar");
+    var count = document.getElementById(kind + "-count");
+    var storeKey = "avondale:" + kind + ":" + key;
+    var done = loadSet(storeKey);
+
+    // clean up older periods so storage stays small
+    try {
+      for (var i = window.localStorage.length - 1; i >= 0; i--) {
+        var k = window.localStorage.key(i);
+        if (k && k.indexOf("avondale:" + kind + ":") === 0 && k !== storeKey) window.localStorage.removeItem(k);
+      }
+    } catch (e) {}
+
+    var boxes = [];
+    items.forEach(function (text, idx) {
+      var li = document.createElement("li");
+      var label = document.createElement("label");
+      label.className = "item";
+      var input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = done.indexOf(idx) !== -1;
+      var box = document.createElement("span");
+      box.className = "box";
+      box.innerHTML = CHECK_SVG;
+      var span = document.createElement("span");
+      span.className = "text";
+      span.textContent = text;
+      label.appendChild(input); label.appendChild(box); label.appendChild(span);
+      li.appendChild(label);
+      list.appendChild(li);
+      boxes.push(input);
+      input.addEventListener("change", save);
+    });
+
+    function save() {
+      var out = [];
+      boxes.forEach(function (b, i) { if (b.checked) out.push(i); });
+      write(storeKey, JSON.stringify(out));
+      render(out.length);
+    }
+    function render(n) {
+      bar.style.width = (n / items.length * 100) + "%";
+      count.textContent = n + " of " + items.length + (n === items.length ? " done" : "");
+    }
+    render(done.filter(function (i) { return i < items.length; }).length);
+
+    document.querySelector('[data-clear="' + kind + '"]').addEventListener("click", function () {
+      if (!boxes.some(function (b) { return b.checked; })) return;
+      if (!window.confirm("Clear all checks in this list?")) return;
+      boxes.forEach(function (b) { b.checked = false; });
+      save();
+    });
+  }
+
+  build("daily", DAILY, dayKey);
+  build("weekly", WEEKLY, weekKey);
+
+  var name = document.getElementById("name");
+  name.value = read("avondale:name") || "";
+  name.addEventListener("input", function () { write("avondale:name", name.value); });
+
+  var loc = document.getElementById("location");
+  var savedLoc = read("avondale:location") || "";
+  loc.value = savedLoc;
+  if (loc.value !== savedLoc) loc.value = "";
+  loc.addEventListener("change", function () { write("avondale:location", loc.value); });
+
+  var notes = document.getElementById("notes");
+  notes.value = read("avondale:notes") || "";
+  notes.addEventListener("input", function () { write("avondale:notes", notes.value); });
+
+  /* ---------- Save as PDF ---------- */
+  var dlPromise = Promise.resolve(null);
+  try {
+    if (window.claude && typeof window.claude.use === "function") {
+      dlPromise = window.claude.use("downloads").catch(function () { return null; });
+    }
+  } catch (e) {}
+
+  function checkedList(id) {
+    return Array.prototype.map.call(document.querySelectorAll("#" + id + " input"), function (b) { return b.checked; });
+  }
+
+  function makePdf() {
+    var lib = window.jspdf && window.jspdf.jsPDF;
+    if (!lib) return null;
+    var doc = new lib({ unit: "pt", format: "letter" });
+    var W = doc.internal.pageSize.getWidth();
+    var H = doc.internal.pageSize.getHeight();
+    var M = 44, maxW = W - M * 2, y = M;
+
+    function need(h) { if (y + h > H - M) { doc.addPage(); y = M; } }
+    function para(str, size, style, gap) {
+      doc.setFont("helvetica", style || "normal");
+      doc.setFontSize(size);
+      var lh = size * 1.3;
+      var lines = doc.splitTextToSize(str, maxW);
+      need(lines.length * lh);
+      doc.text(lines, M, y + size);
+      y += lines.length * lh + (gap || 0);
+    }
+    function section(title, items, checks, countLabel) {
+      need(60);
+      para(title, 13, "bold", 2);
+      para(countLabel, 9.5, "normal", 6);
+      var size = 10.5, lh = size * 1.3, indent = 24;
+      items.forEach(function (t, i) {
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(size);
+        var lines = doc.splitTextToSize(t, maxW - indent);
+        var h = lines.length * lh + 7;
+        need(h);
+        doc.setDrawColor(60);
+        doc.setLineWidth(0.9);
+        doc.rect(M, y + 1, 12, 12);
+        if (checks[i]) {
+          doc.setLineWidth(1.8);
+          doc.line(M + 2.5, y + 7.5, M + 5.5, y + 10.5);
+          doc.line(M + 5.5, y + 10.5, M + 10, y + 4);
+        }
+        doc.setTextColor(0);
+        doc.text(lines, M + indent, y + size);
+        doc.setDrawColor(215);
+        doc.setLineWidth(0.5);
+        doc.line(M, y + h - 2, W - M, y + h - 2);
+        y += h;
+      });
+      y += 14;
+    }
+
+    doc.setTextColor(0);
+    para("AVONDALE DEALERSHIPS", 10.5, "bold", 2);
+    para("Facilities Team Member: Daily & Weekly Duties Checklist", 17, "bold", 6);
+    para("Operating standard: If you see it, take ownership of it. Correct it, clean it, or report it please.", 10, "italic", 10);
+
+    var nm = name.value.trim() || "________________________";
+    var lc = loc.value || "________________________";
+    para("Member: " + nm + "     Location: " + lc, 11, "bold", 2);
+    para("Date: " + now.toLocaleDateString(undefined, fmtDay) + "     Week of " + monday.toLocaleDateString(undefined, fmtShort), 10, "normal", 14);
+
+    var dChecks = checkedList("daily-list"), wChecks = checkedList("weekly-list");
+    var dn = dChecks.filter(Boolean).length, wn = wChecks.filter(Boolean).length;
+    section("DAILY DUTIES (complete every shift)", DAILY, dChecks, dn + " of " + DAILY.length + " complete");
+    section("WEEKLY DUTIES (complete at least once each week)", WEEKLY, wChecks, wn + " of " + WEEKLY.length + " complete");
+
+    need(90);
+    para("NOTES / ITEMS REQUIRING FOLLOW-UP", 13, "bold", 6);
+    var n = notes.value.trim();
+    if (n) {
+      para(n, 10.5, "normal", 0);
+    } else {
+      doc.setDrawColor(120);
+      doc.setLineWidth(0.6);
+      for (var k = 0; k < 4; k++) { y += 22; doc.line(M, y, W - M, y); }
+    }
+    return doc;
+  }
+
+  function pdfName() {
+    var who = name.value.trim().replace(/[^A-Za-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return "Facilities-Checklist-" + (who ? who + "-" : "") + dayKey + ".pdf";
+  }
+
+  var pdfBtn = document.getElementById("print");
+  pdfBtn.addEventListener("click", function () {
+    var doc = null;
+    try { doc = makePdf(); } catch (e) { doc = null; }
+    dlPromise.then(function (dl) {
+      if (doc && !dl) { try { doc.save(pdfName()); return; } catch (e) {} }
+      if (!doc || !dl) { window.print(); return; }
+      return dl.save({ filename: pdfName(), data: doc.output("blob") }).catch(function (err) {
+        if (err && err.code === "declined") return;
+        window.print();
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
